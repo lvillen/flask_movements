@@ -1,8 +1,34 @@
 {% extends 'base.html' %}
 
-{% block title %} Lista {% endblock %} 
+{% block title %}Romanos{% endblock %} 
 
 {% block content %}
-    <h2>Lista de movimientos</h2>
-    <p>Aquí va mi lista de movimientos.</p>
+    <h2>Ingresos mensuales <a href="creaalta">Nuevo</a></h2>
+        <button>
+            Submit
+        </button>
+    </form>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Concepto</th>
+                <th>Guita</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in datos %}
+                <tr>
+                    <td>{{registro[0]}}</td>
+                    <td>{{registro[1]}}</td>
+                    <td>{{registro [2]}}€</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2" style="text-align: right;"><em>Total</em></td>
+                <td><strong>{{total}}€</strong></td>
+            </tr>
+        </tbody>
+    </table>
 {% endblock %}

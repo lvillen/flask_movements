@@ -3,9 +3,11 @@ from flask import render_template, request, url_for, redirect
 import csv
 import sqlite3
 
+DBFILE = 'movements/data/basededatos.db'
+
 @app.route('/')
 def listaIngresos():
-    conn = sqlite3.connect('movements/data/basededatos.db')
+    conn = sqlite3.connect(DBFILE)
     c = conn.cursor()
 
     c.execute('SELECT fecha, concepto, cantidad, id FROM movimientos;')
@@ -29,7 +31,7 @@ def listaIngresos():
 @app.route('/creaalta', methods=['GET', 'POST'])
 def nuevoIngreso():
     if request.method == 'POST':
-        conn = sqlite3.connect('movements/data/basededatos.db')
+        conn = sqlite3.connect(DBFILE)
         c = conn.cursor()
         
         c.execute('INSERT INTO movimientos (cantidad, concepto, fecha) VALUES (?, ?, ?);', 
@@ -50,8 +52,35 @@ def nuevoIngreso():
 
 @app.route('/modifica/<id>', methods=['GET', 'POST'])
 def modificaIngreso(id):
+    conn = sqlite3.connect(DBFILE)
+    c = conn.cursor()
+
     if request.method == 'GET':
-        conn = sqlite3.connect('movements/data/basededatos.db')
+        c.execute('SELECT fecha, concepto, cantidad, id FROM movimientos where id = ?', (id,))
+        registro = c.fetchone()
+
+        conn.close()
+
+        return render_template('modifica.html', registro=registro)
+    
+    else:
+        c.execute('UPDATE movimientos SET fecha = ?, concepto = ?, cantidad = ? WHERE id = ?',
+            (request.form.get('fecha'),
+            request.form.get('concepto'),
+            float(request.form.get('cantidad')),
+            id
+            )
+        )
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('listaIngresos'))
+
+    
+    ''' 
+    MI SOLUCIÓN
+    if request.method == 'GET':
+        conn = sqlite3.connect(DBFILE)
         c = conn.cursor()
 
         c.execute('SELECT fecha, concepto, cantidad, id FROM movimientos WHERE id = ?;', id)
@@ -62,7 +91,7 @@ def modificaIngreso(id):
         return render_template('modifica.html', movimiento='id', datos=registros )
     
     if request.method == 'POST':
-        conn = sqlite3.connect('movements/data/basededatos.db')
+        conn = sqlite3.connect(DBFILE)
         c = conn.cursor()
 
         c.execute('UPDATE movimientos SET fecha = ?, concepto = ?, cantidad = ? WHERE id = ?;', 
@@ -75,3 +104,4 @@ def modificaIngreso(id):
         conn.close()
     
         return redirect(url_for('listaIngresos'))
+    '''

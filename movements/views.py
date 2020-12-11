@@ -8,7 +8,7 @@ def listaIngresos():
     conn = sqlite3.connect('movements/data/basededatos.db')
     c = conn.cursor()
 
-    c.execute('SELECT fecha, concepto, cantidad FROM movimientos;')
+    c.execute('SELECT fecha, concepto, cantidad, id FROM movimientos;')
 
 
     '''
@@ -47,3 +47,31 @@ def nuevoIngreso():
         return redirect(url_for('listaIngresos'))
 
     return render_template('alta.html')
+
+@app.route('/modifica/<id>', methods=['GET', 'POST'])
+def modificaIngreso(id):
+    if request.method == 'GET':
+        conn = sqlite3.connect('movements/data/basededatos.db')
+        c = conn.cursor()
+
+        c.execute('SELECT fecha, concepto, cantidad, id FROM movimientos WHERE id = ?;', id)
+        registros = c.fetchall()
+
+        conn.close()
+
+        return render_template('modifica.html', movimiento='id', datos=registros )
+    
+    if request.method == 'POST':
+        conn = sqlite3.connect('movements/data/basededatos.db')
+        c = conn.cursor()
+
+        c.execute('UPDATE movimientos SET fecha = ?, concepto = ?, cantidad = ? WHERE id = ?;', 
+                (request.form.get('fecha'), 
+                request.form.get('concepto'), 
+                (float(request.form.get('cantidad'))),
+                id))
+        
+        conn.commit()
+        conn.close()
+    
+        return redirect(url_for('listaIngresos'))

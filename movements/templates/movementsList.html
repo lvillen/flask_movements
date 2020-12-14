@@ -4,7 +4,7 @@
 
 {% block content %}
     <h2>Ingresos mensuales <a href="creaalta">Nuevo</a></h2>
-
+    {% if ingresos|length > 0 %}
     <br>
     <table>
         <thead>
@@ -17,9 +17,9 @@
         <tbody>
             {% for registro in datos %}
                 <tr>
-                    <td><a href="modifica/{{registro[3]}}">{{registro[0]}}</a></td>
-                    <td>{{registro[1]}}</td>
-                    <td>{{registro [2]}}€</td>
+                    <td><a href="modifica/{{registro['id']}}">{{registro['fecha']}}</a></td>
+                    <td>{{registro['concepto']}}</td>
+                    <td>{{registro ['cantidad']}}€</td>
                 </tr>
             {% endfor %}
             <tr>
@@ -28,4 +28,7 @@
             </tr>
         </tbody>
     </table>
+{% else %}
+<p>No hay movimientos.</p>
+{% endif %}
 {% endblock %}

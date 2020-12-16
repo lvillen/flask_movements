@@ -3,21 +3,36 @@
 {% block title %}Modifica{% endblock %}
 
 {% block content %}
-<form action="{{/modifica/registro['id']}}" method="POST">
+<form action="/modifica/{{id}}" method="post">
     <div class="field">
-        <label for="fecha">Fecha:</label>
-        <input type="date" name="fecha" value="{{ registro['fecha'] }}">
-    </div>
-    <div class="field">    
-        <label for="concepto">Concepto:</label>
-        <input type="text" name="concepto" value="{{ registro['concepto'] }}">
-    </div>
-    <div class="field">
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" name="cantidad" step="0.01" value="{{ registro['cantidad'] }}">
+        {{ form.fecha.label }}
+        {{ form.fecha(type="date") }}
+        {% for error in form.fecha.errors %}
+            <p class="err-msg">
+                {{ error }}
+            </p>
+        {% endfor %}
     </div>
     <div class="field">
-        <button>Actualizar</button>
+        {{ form.concepto.label }}
+        {{ form.concepto }}
+        {% for error in form.concepto.errors %}
+            <p class="err-msg">
+                {{ error }}
+            </p>
+        {% endfor %}
     </div>
+    <div class="field">
+        {{ form.cantidad.label }}
+        {{ form.cantidad }}
+        {% for error in form.cantidad.errors %}
+            <p class="err-msg">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </div>
+    <div class="field">
+        {{ form.submit }}
+    </div>  
 </form>
 {% endblock %}

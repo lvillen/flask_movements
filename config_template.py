@@ -1,0 +1,2 @@
+SECRET_KEY='Pon aquú tu clave CSRF'
+HOST_DB='PON TU HOST LOCALHOST:'

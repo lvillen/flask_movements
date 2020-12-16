@@ -1,24 +1,39 @@
 {% extends 'base.html' %}
 
-{% block title %}Alta{% endblock %}
+{% block title %} <Romanos></Romanos> {% endblock %}
 
 {% block content %}
-    <form action="creaalta" method="POST">
-        <div class="field">
-            <label for="fecha">Fecha:</label>
-            <input type="date" name="fecha" required>
-        </div>
-        <div class="field">    
-            <label for="concepto">Concepto:</label>
-            <input type="text" name="concepto" required>
-        </div>
-        <div class="field">
-            <label for="cantidad">Cantidad:</label>
-            <input type="number" name="cantidad" step="0.01" required>
-        </div>
-        <div class="field">
-            <button>Enviar</button>
-        </div>
-    </form>
-
-{% endblock %}
+<form action="creaalta" method="post">
+    {{ form.hidden_tag() }}
+    <div class="field">
+        {{ form.fecha.label }}
+        {{ form.fecha(type="date") }}
+        {% for error in form.fecha.errors %}
+            <p class="err-msg">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </div>
+    <div class="field">
+        {{ form.concepto.label }}
+        {{ form.concepto(placeholder='En que te lo has gastado') }}
+        {% for error in form.concepto.errors %}
+            <p class="err-msg">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </div>
+    <div class="field">
+        {{ form.cantidad.label }}
+        {{ form.cantidad(placeholder='Escribe un número') }}
+        {% for error in form.cantidad.errors %}
+            <p class="err-msg">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </div>
+    <div class="field">
+        {{ form.submit }}
+    </div>  
+</form>
+{%  endblock %}

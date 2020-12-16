@@ -4,6 +4,7 @@
 
 {% block content %}
 <form action="/modifica/{{id}}" method="post">
+    {{ form.hidden_tag() }}
     <div class="field">
         {{ form.fecha.label }}
         {{ form.fecha(type="date") }}
